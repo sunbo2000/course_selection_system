@@ -1,0 +1,75 @@
+# 服务端口
+server:
+  port: 8010
+  # 服务名
+spring:
+  application:
+    name: service-gateway
+  # nacos服务地址
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 175.178.189.89:12208
+  #使用服务发现路由
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+  #服务路由名小写
+  #spring.cloud.gateway.discovery.locator.lower-case-org.snbo.aclService.service-id=true
+  #设置路由id
+      routes:
+      - id: service-acl
+      #设置路由的uri
+        uri: lb://service-acl
+      #设置路由断言,代理servicerId为auth-service的/auth/路径
+        predicates:
+        - Path=/*/acl/**
+      #配置service-edu服务
+
+      - id: service-edu
+        uri: lb://service-edu
+        predicates:
+        - Path=/eduService/**
+       #配置service-ucenter服务
+
+      - id: service-ucenter
+        uri: lb://service-uCenter
+        predicates:
+        - Path=/eduCenter/**
+
+      - id: service-cms
+        uri: lb://service-cms
+        predicates:
+        - Path=/cmsService/**
+
+      - id: service-msm
+        uri: lb://service-msm
+        predicates:
+        - Path=/eduMsm/**
+
+      - id: service-order
+        uri: lb://service-order
+        predicates:
+        - Path=/eduOrder/**
+
+      - id: service-oss
+        uri: lb://service-oss
+        predicates:
+        - Path=/eduOss/**
+
+      - id: service-daily
+        uri: lb://service-daily
+        predicates:
+        - Path=/eduStatistics/**
+
+      - id: service-vod
+        uri: lb://service-vod
+        predicates:
+        - Path=/eduVod/**
+
+      - id: service-acl
+        uri: lb://service-acl
+        predicates:
+        - Path=/admin/**

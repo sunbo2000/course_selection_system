@@ -1,0 +1,68 @@
+## 服务端口
+#server:
+#  port: 8009
+#
+#spring:
+#  #redis配置
+#  redis:
+#    host: 175.178.189.89
+#    port: 12207
+#    database: 0
+#    timeout: 1800000
+#    lettuce:
+#      pool:
+#        max-active: 20
+#        max-wait: -1
+#        #最大阻塞等待时间(负数表示没限制)
+#        max-idle: 5
+#        min-idle: 0
+#    password: 12207
+#
+#  # nacos服务地址
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 175.178.189.89:12208
+#  # 服务名
+#  application:
+#    name: service-acl
+#  # 环境设置：dev、test、prod
+#  profiles:
+#    active: dev
+#  # mysql数据库连接
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mogu?serverTimezone=GMT%2B8
+#    username: root
+#    password: root
+#  #json时间格式
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+#
+#mybatis-plus:
+#  #配置mapper xml文件的路径
+#  mapper-locations: classpath:org/snbo/aclService/mapper/xml/*.xml
+#  #mybatis日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+##豪猪哥配置
+##开启熔断机制
+##feign:
+##  hystrix:
+##    enabled: true
+###设置hystrix超时时间，默认1000ms
+##hystrix:
+##  command:
+##    default:
+##      execution:
+##        isolation:
+##          thread:
+##            timeoutInMilliseconds: 6000
+#
+##mybatis-plus:
+#
+##
+##logging:
+##  level:
+##    root: debug

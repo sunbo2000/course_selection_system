@@ -1,0 +1,16 @@
+spring:
+  # 服务名
+  application:
+    name: service-uCenter
+    # nacos服务地址
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 175.178.189.89:12208
+        file-extension: yaml
+        namespace: 00980942-3adc-4ccd-9884-2c7aac865716
+
+      discovery:
+        server-addr: 175.178.189.89:12208
+

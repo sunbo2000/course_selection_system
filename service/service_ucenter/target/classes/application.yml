@@ -1,0 +1,76 @@
+## 服务端口
+#server:
+#  port: 8160
+#
+#spring:
+#  #redis配置
+#  redis:
+#    host: 175.178.189.89
+#    port: 12207
+#    database: 0
+#    timeout: 1800000
+#    lettuce:
+#      pool:
+#        max-active: 20
+#        max-wait: -1
+#        #最大阻塞等待时间(负数表示没限制)
+#        max-idle: 5
+#        min-idle: 0
+#    password: 12207
+#
+#  # nacos服务地址
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 175.178.189.89:12208
+#  # 服务名
+#  application:
+#    name: service-uCenter
+#  # 环境设置：dev、test、prod
+#  profiles:
+#    active: dev
+#  # mysql数据库连接
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mogu?serverTimezone=GMT%2B8
+#    username: root
+#    password: root
+#  #json时间格式
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+#
+##配置mapper xml文件的路径
+#mybatis-plus:
+#  mapper-locations: classpath:org/snbo/uCenterService/mapper/xml/*.xml
+#  #mybatis日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+## 微信开放平台 appid
+#wx:
+#  open:
+#    app_id: wxed9954c01bb89b47
+#    # 微信开放平台 appsecret
+#    app_secret: a7482517235173ddb4083788de60b90e
+#    # 微信开放平台 重定向url
+#    redirect_url: http://localhost:8160/api/ucenter/wx/callback
+##豪猪哥配置
+##开启熔断机制
+#feign:
+#  hystrix:
+#    enabled: true
+##设置hystrix超时时间，默认1000ms
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 6000
+#
+#
+#
+##
+##logging:
+##  level:
+##    root: debug
