@@ -12,10 +12,10 @@
                sub1.`title` AS one_subject,
                sub2.`title` AS two_subject
         FROM edu_course course
-                 LEFT OUTER JOIN edu_course_description des ON course.`id` = des.`id`
-                 LEFT OUTER JOIN edu_teacher teach ON course.`teacher_id` = teach.`id`
-                 LEFT OUTER JOIN edu_subject sub1 ON course.`subject_parent_id` = sub1.`id`
-                 LEFT OUTER JOIN edu_subject sub2 ON course.`subject_id` = sub2.`id`
+                 LEFT OUTER JOIN db_course_description des ON course.`id` = des.`id`
+                 LEFT OUTER JOIN db_teacher teach ON course.`teacher_id` = teach.`id`
+                 LEFT OUTER JOIN db_subject sub1 ON course.`subject_parent_id` = sub1.`id`
+                 LEFT OUTER JOIN db_subject sub2 ON course.`subject_id` = sub2.`id`
         WHERE course.`id` = #{courseId}
     </select>
 
@@ -37,10 +37,10 @@
                sub2.`id`    AS subject_level_two_id,
                sub2.title   AS subject_level_two
         FROM edu_course course
-                 LEFT OUTER JOIN edu_course_description des ON course.`id` = des.`id`
-                 LEFT OUTER JOIN edu_teacher teach ON course.`teacher_id` = teach.`id`
-                 LEFT OUTER JOIN edu_subject sub1 ON course.`subject_parent_id` = sub1.`id`
-                 LEFT OUTER JOIN edu_subject sub2 ON course.`subject_id` = sub2.`id`
+                 LEFT OUTER JOIN db_course_description des ON course.`id` = des.`id`
+                 LEFT OUTER JOIN db_teacher teach ON course.`teacher_id` = teach.`id`
+                 LEFT OUTER JOIN db_subject sub1 ON course.`subject_parent_id` = sub1.`id`
+                 LEFT OUTER JOIN db_subject sub2 ON course.`subject_id` = sub2.`id`
         WHERE course.id = #{courseId}
     </select>
 
@@ -56,10 +56,5 @@
                                  ON course.`teacher_id` = teach.`id`
         WHERE course.id = #{courseId}
     </select>
-    
-    <select id="getCourseCount" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM `edu_course`
-        WHERE DATE(gmt_create) = #{day}
-    </select>
+
 </mapper>

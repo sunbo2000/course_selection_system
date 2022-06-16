@@ -1,54 +1,53 @@
-package org.snbo.aclservice.bean;
+package org.snbo.dbservice.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
+
 import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户表
+ * 讲师
  * </p>
  *
- * @author testjava
- * @since 2020-01-12
+ * @author snbo
+ * @since 2022-06-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("db_user")
-@ApiModel(value="User对象", description="用户表")
-public class User implements Serializable {
+@ApiModel(value="DbTeacher对象", description="讲师")
+public class DbTeacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "会员id")
+    @ApiModelProperty(value = "教师ID")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "微信openid")
-    private String username;
+    @ApiModelProperty(value = "教师学工号")
+    private String teacherWorkId;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    @ApiModelProperty(value = "教师姓名")
+    private String name;
 
-    @ApiModelProperty(value = "昵称")
-    private String nickName;
+    @ApiModelProperty(value = "教师简介")
+    private String intro;
 
-    @ApiModelProperty(value = "用户头像")
-    private String salt;
-
-    @ApiModelProperty(value = "用户签名")
-    private String token;
+    @ApiModelProperty(value = "教师头像")
+    private String avatar;
 
     @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
     @TableLogic
-    private Boolean isDeleted;
+    private Integer isDeleted;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)

@@ -1,0 +1,18 @@
+spring:
+  # 服务名
+  application:
+    name: db-service
+    # nacos服务地址
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 175.178.189.89:12208
+        file-extension: yaml
+        namespace: b7a5df1e-2032-4c5d-9d76-1c3ffc50b966
+      discovery:
+        server-addr: 175.178.189.89:12208
+    # 服务环境
+#  profiles:
+
+#    active: dev

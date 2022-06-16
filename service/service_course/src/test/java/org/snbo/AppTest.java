@@ -1,4 +1,6 @@
-package org.snbo.demo;
+package org.snbo;
+
+import static org.junit.Assert.assertTrue;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -11,26 +13,11 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-/**
- * @author
- * @since 2018/12/13
- */
-
-public class CodeGenerator {
-
+public class AppTest {
 
     @Test
-    public void test(){
-        Map<String,String> map = new HashMap<>();
-        Set<Map.Entry<String, String>> entries = map.entrySet();
-    }
-
-    @Test
-    public void run() {
+    public void shouldAnswerWithTrue() {
         // 1、创建代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
@@ -38,12 +25,12 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         /* 项目路径,可能要改的地方 */
-        gc.setOutputDir("D:\\A.Code\\A.project\\mogu_parent\\service\\service_edu" + "/src/main/java");
+        gc.setOutputDir("D:\\A.Code\\datebase\\source\\database-main\\service\\service_course" + "/src/main/java");
 
         gc.setAuthor("snbo");
         gc.setOpen(false); //生成后是否打开资源管理器
         gc.setFileOverride(false); //重新生成时文件是否覆盖
-        gc.setServiceName("%sService");	//去掉Service接口的首字母I
+        gc.setServiceName("%sService");    //去掉Service接口的首字母I
         gc.setIdType(IdType.ID_WORKER_STR); //主键策略
         gc.setDateType(DateType.ONLY_DATE);//定义生成的实体类中日期类型
         gc.setSwagger2(true);//开启Swagger2模式
@@ -52,7 +39,7 @@ public class CodeGenerator {
 
         // 3、数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://175.178.178.89:12209/databaseSystem?serverTimezone=GMT%2B8");
+        dsc.setUrl("jdbc:mysql://175.178.189.89:12209/databaseSystem?serverTimezone=GMT%2B8");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("snbo");
         dsc.setPassword("1234");
@@ -62,7 +49,7 @@ public class CodeGenerator {
         // 4、包配置
         PackageConfig pc = new PackageConfig();
         /* 模块名,可能要改的地方 */
-        pc.setModuleName("eduService");
+        pc.setModuleName("dbservice");
         pc.setParent("org.snbo");
         pc.setController("controller");
         pc.setEntity("bean");
@@ -73,8 +60,9 @@ public class CodeGenerator {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
         /* 数据库表名,要改的地方 */
-        strategy.setInclude("edu_qa");
+        strategy.setInclude("db_course","db_course_description","db_subject","db_teacher");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
+//        strategy.setTablePrefix("db_");
         strategy.setTablePrefix(pc.getModuleName() + "_"); //生成实体时去掉表前缀
 
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
@@ -89,4 +77,3 @@ public class CodeGenerator {
         mpg.execute();
     }
 }
-

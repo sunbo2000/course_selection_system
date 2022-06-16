@@ -6,27 +6,19 @@ import org.snbo.commonutils.ResultCode;
 import org.snbo.commonutils.vo.CourseOrderVo;
 import org.snbo.eduservice.bean.EduCourse;
 import org.snbo.eduservice.bean.EduCourseDescription;
-import org.snbo.eduservice.bean.frontvo.CourseFrontInfoVo;
-import org.snbo.eduservice.bean.frontvo.CourseQueryVo;
-import org.snbo.eduservice.bean.frontvo.PlayerCourseVo;
 import org.snbo.eduservice.bean.vo.CourseInfoVo;
-import org.snbo.eduservice.bean.vo.CoursePublishInfo;
 import org.snbo.eduservice.bean.vo.CourseQuery;
 import org.snbo.eduservice.mapper.EduCourseMapper;
-import org.snbo.eduservice.service.EduChapterService;
 import org.snbo.eduservice.service.EduCourseDescriptionService;
 import org.snbo.eduservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.snbo.eduservice.service.EduVideoService;
 import org.snbo.servicebase.exceptionhandler.MoguException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -42,16 +34,14 @@ import java.util.Map;
 public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse> implements EduCourseService {
 
     private final EduCourseDescriptionService descriptionService;
-    private final EduChapterService chapterService;
-    private final EduVideoService videoService;
+
 
     public static final String STR = "1";
 
     @Autowired
-    public EduCourseServiceImpl(EduCourseDescriptionService descriptionService, EduChapterService chapterService, EduVideoService videoService) {
+    public EduCourseServiceImpl(EduCourseDescriptionService descriptionService) {
         this.descriptionService = descriptionService;
-        this.chapterService = chapterService;
-        this.videoService = videoService;
+
     }
 
 
@@ -64,12 +54,14 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         if (!save) {
             throw new MoguException(20001, "添加课程失败");
         }
+
         String cid = eduCourse.getId();
         EduCourseDescription eduCourseDescription = new EduCourseDescription();
         //把接收的info信息里的简介信息给eduCourseDescription保存到edu_course_description表
         BeanUtils.copyProperties(courseInfoVo, eduCourseDescription);
         eduCourseDescription.setId(cid);
         descriptionService.save(eduCourseDescription);
+
         return cid;
     }
 
@@ -104,15 +96,8 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         }
     }
 
-    /**
-     * 获取发布信息
-     */
-    @Override
-    public CoursePublishInfo getPublishCourseInfo(String id) {
-        return baseMapper.getPublishCourseInfo(id);
-    }
 
-    @Override
+  /*  @Override
     public void removeAllInfo(String courseId) {
         //删小节
         videoService.removeByCourseId(courseId);
@@ -122,76 +107,10 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         descriptionService.removeByCourseId(courseId);
         //删课程
         baseMapper.deleteById(courseId);
-    }
+    }*/
 
 
-    /**
-     * 首页前八条热门课程
-     */
-    @Override
-    @Cacheable(value = "courses1", key = "'indexInfo1'")
-    public List<EduCourse> listIndexInfo() {
-        //前八条课程记录
-        QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
-        wrapper.orderByDesc("view_count");
-        wrapper.last("limit 8");
-        return baseMapper.selectList(wrapper);
-    }
 
-    @Override
-    public Map<String, Object> getFrontCourseInfoPage(Page<EduCourse> coursePage, CourseQueryVo courseQueryVo) {
-        QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
-
-        String title = courseQueryVo.getTitle();
-        String viewCount = courseQueryVo.getViewCount();
-        String gmtCreateSort = courseQueryVo.getGmtCreateSort();
-        String priceSort = courseQueryVo.getPriceSort();
-        String subjectParentId = courseQueryVo.getSubjectParentId();
-        String subjectId = courseQueryVo.getSubjectId();
-
-
-        if (!StringUtils.isEmpty(title)) {
-            wrapper.like("title", title);
-        }
-        if (!StringUtils.isEmpty(subjectParentId)) {
-            wrapper.eq("subject_parent_id", subjectParentId);
-        }
-        if (!StringUtils.isEmpty(subjectId)) {
-            wrapper.eq("subject_id", subjectId);
-        }
-        if (!StringUtils.isEmpty(viewCount)) {
-            wrapper.orderByDesc("view_count");
-        }
-        if (!StringUtils.isEmpty(gmtCreateSort)) {
-            wrapper.orderByDesc("gmt_create");
-        }
-        if (!StringUtils.isEmpty(priceSort)) {
-            if (STR.equals(priceSort)) {
-                wrapper.orderByAsc("price");
-            } else {
-                wrapper.orderByDesc("price");
-            }
-        }
-        //只显示已发布的课程
-        wrapper.eq("status", "Normal");
-        //默认按购买数降序,有其他条件优先其他条件
-        wrapper.orderByDesc("buy_count");
-        baseMapper.selectPage(coursePage, wrapper);
-
-        long total = coursePage.getTotal();
-        List<EduCourse> records = coursePage.getRecords();
-        HashMap<String, Object> map = new HashMap<>(16);
-        map.put("total", total);
-        map.put("courseInfo", records);
-
-        return map;
-    }
-
-
-    @Override
-    public CourseFrontInfoVo getBaseCourseInfo(String courseId) {
-        return baseMapper.getFrontCourseInfo(courseId);
-    }
 
     @Override
     public CourseOrderVo getOrderCourseInfo(String courseId) {
@@ -207,13 +126,6 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         return baseMapper.getCourseCount(day);
     }
 
-    @Override
-    public PlayerCourseVo getPlayerCourseInfoById(String id) {
-        EduCourse course = baseMapper.selectById(id);
-        PlayerCourseVo playerCourseVo = new PlayerCourseVo();
-        BeanUtils.copyProperties(course, playerCourseVo);
-        return playerCourseVo;
-    }
 
     @Override
     public Map<String, Object> getCourseInfoPage(Long current, Long size, CourseQuery courseQuery) {
@@ -240,6 +152,7 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
             wrapper.eq("subject_id", subjectId);
         }
         wrapper.orderByDesc("gmt_modified");
+
         baseMapper.selectPage(page, wrapper);
 
         Map<String, Object> map = new HashMap<>(2);

@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("acl_role_permission")
+@TableName("db_role_permission")
 @ApiModel(value="RolePermission对象", description="角色权限")
 public class RolePermission implements Serializable {
 

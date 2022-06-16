@@ -6,7 +6,6 @@ import org.snbo.commonutils.R;
 import org.snbo.commonutils.vo.CourseOrderVo;
 import org.snbo.eduservice.bean.EduCourse;
 import org.snbo.eduservice.bean.vo.CourseInfoVo;
-import org.snbo.eduservice.bean.vo.CoursePublishInfo;
 import org.snbo.eduservice.bean.vo.CourseQuery;
 import org.snbo.eduservice.service.EduCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,25 +62,12 @@ public class EduCourseController {
         return R.ok();
     }
 
-    @GetMapping("/getPublishCourseInfo/{id}")
-    @ApiOperation(value = "(查)根据id查询最终发布需要反馈的数据")
-    public R getPublishCourseInfo(@PathVariable String id) {
-        CoursePublishInfo publishCourseInfo = courseService.getPublishCourseInfo(id);
-        return R.ok().data("publishCourseInfo", publishCourseInfo);
-    }
 
     @PutMapping
     @ApiOperation(value = "(改)更改课程状态为已发布")
     public R updateStatus(@RequestBody EduCourse course) {
         course.setStatus("Normal");
         courseService.updateById(course);
-        return R.ok();
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "(删)根据id删除课程")
-    public R deleteCourseById(@PathVariable String id) {
-        courseService.removeAllInfo(id);
         return R.ok();
     }
 

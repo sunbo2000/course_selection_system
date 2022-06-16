@@ -1,17 +1,14 @@
 package org.snbo.eduservice.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.snbo.commonutils.vo.CourseOrderVo;
 import org.snbo.eduservice.bean.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.snbo.eduservice.bean.frontvo.CourseFrontInfoVo;
-import org.snbo.eduservice.bean.frontvo.CourseQueryVo;
-import org.snbo.eduservice.bean.frontvo.PlayerCourseVo;
+
 import org.snbo.eduservice.bean.vo.CourseInfoVo;
-import org.snbo.eduservice.bean.vo.CoursePublishInfo;
+
 import org.snbo.eduservice.bean.vo.CourseQuery;
 
-import java.util.List;
+
 import java.util.Map;
 
 /**
@@ -52,54 +49,6 @@ public interface EduCourseService extends IService<EduCourse> {
      */
     void updateCourseInfo(CourseInfoVo courseInfo);
 
-    /**
-     * description: 根据课程id获取课程信息, 后台发布课程时需要显示的课程信息
-     *
-     * @param courseId 课程 id
-     * @return {@link CoursePublishInfo}
-     * @author sunbo
-     * @date 2022/5/27 17:44
-     */
-    CoursePublishInfo getPublishCourseInfo(String courseId);
-
-    /**
-     * description: 根据课程 id 删除所有课程信息,包括基本信息,描述信息,章节信息和小节信息
-     *
-     * @param courseId 课程 id
-     * @author sunbo
-     * @date 2022/5/28 11:21
-     */
-    void removeAllInfo(String courseId);
-
-    /**
-     * description: 根据课程浏览量排序,获取前八条课程信息
-     *
-     * @return {@link List<EduCourse>}
-     * @author sunbo
-     * @date 2022/5/28 11:24
-     */
-    List<EduCourse> listIndexInfo();
-
-    /**
-     * description: 根据查询条件,分页查询课程信息
-     *
-     * @param coursePage    分页组件
-     * @param courseQueryVo 查询条件
-     * @return {@link Map<String,Object>} 返回 Map 集合,value1 为总课程数(long 型),value2 为课程信息集合(List 型)
-     * @author sunbo
-     * @date 2022/5/28 11:26
-     */
-    Map<String, Object> getFrontCourseInfoPage(Page<EduCourse> coursePage, CourseQueryVo courseQueryVo);
-
-    /**
-     * description: 根据课程 id 获取课程的基本信息
-     *
-     * @param courseId 课程 id
-     * @return {@link CourseFrontInfoVo}
-     * @author sunbo
-     * @date 2022/5/28 11:30
-     */
-    CourseFrontInfoVo getBaseCourseInfo(String courseId);
 
     /**
      * description: 根据课程 id 获取课程信息,在查询课程订单信息时使用
@@ -121,15 +70,6 @@ public interface EduCourseService extends IService<EduCourse> {
      */
     Integer getCourseCount(String day);
 
-    /**
-     * description: 根据课程 id 获取课程信息
-     *
-     * @param id 课程 id
-     * @return {@link PlayerCourseVo} 播放界面课程信息 vo 类
-     * @author sunbo
-     * @date 2022/5/29 18:13
-     */
-    PlayerCourseVo getPlayerCourseInfoById(String id);
 
     /**
      * description: 根据查询条件分页查询课程信息

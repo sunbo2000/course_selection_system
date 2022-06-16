@@ -1,8 +1,11 @@
-package org.snbo.aclservice.bean;
+package org.snbo.dbservice.bean;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,34 +15,29 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 课程科目
  * </p>
  *
- * @author testjava
- * @since 2020-01-12
+ * @author snbo
+ * @since 2022-06-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("db_user_role")
-@ApiModel(value="UserRole对象", description="")
-public class UserRole implements Serializable {
+@ApiModel(value="DbSubject对象", description="课程科目")
+public class DbSubject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "课程类别ID")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "角色id")
-    private String roleId;
+    @ApiModelProperty(value = "父ID")
+    private String parentId;
 
-    @ApiModelProperty(value = "用户id")
-    private String userId;
-
-    @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
-    @TableLogic
-    private Boolean isDeleted;
+    @ApiModelProperty(value = "类别名称")
+    private String title;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
