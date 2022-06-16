@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="DbCourse对象", description="")
+@ApiModel(value="DbCourse对象", description="课程实体类")
 public class DbCourse implements Serializable {
 
     private static final long serialVersionUID = 1L;

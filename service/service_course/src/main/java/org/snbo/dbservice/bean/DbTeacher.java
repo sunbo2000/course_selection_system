@@ -35,6 +35,9 @@ public class DbTeacher implements Serializable {
     @ApiModelProperty(value = "教师学工号")
     private String teacherWorkId;
 
+    @ApiModelProperty(value = "教师所在学院Id")
+    private String collegeId;
+
     @ApiModelProperty(value = "教师姓名")
     private String name;
 

@@ -51,19 +51,12 @@ public class UCenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
      */
     @Override
     public String login(LoginVo loginVo) {
-        //登录记录放进redis里
-        String loginCountName = TimeUtils.getNowLoginCountName();
-        String loginCount = redisTemplate.opsForValue().get(loginCountName);
-        if (StringUtils.isEmpty(loginCount)) {
-            redisTemplate.opsForValue().set(loginCountName, "1", TimeUtils.getInvalidTime(), TimeUnit.SECONDS);
-        } else {
-            redisTemplate.opsForValue().set(loginCountName, String.valueOf(Integer.parseInt(loginCount) + 1), 0);
-        }
 
-        //获取登录手机号和密码
+        //获取登账号和密码
         String mobile = loginVo.getMobile();
         String password = loginVo.getPassword();
         //手机号和密码不能为空,前后端都判断
+
         if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password)) {
             throw new MoguException(20001, "登录失败");
         }
@@ -91,41 +84,6 @@ public class UCenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         return JwtUtils.getJwtToken(theMember.getId(), theMember.getNickname());
     }
 
-    @Override
-    public void register(RegisterVo registerVo) {
-        String mobile = registerVo.getMobile();
-        String password = registerVo.getPassword();
-        String nickname = registerVo.getNickname();
-        String code = registerVo.getCode();
-        //判断非空
-        if (StringUtils.isEmpty(nickname) || StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password) || StringUtils.isEmpty(code)) {
-            throw new MoguException(20001, "注册失败");
-        }
-
-        //判断验证码
-        //从redis中取出数据
-        String redisCode = redisTemplate.opsForValue().get(mobile);
-        if (!code.equals(redisCode)) {
-            throw new MoguException(20001, "验证码错误,请检查后输入");
-        }
-        //判断是否已经注册过
-        QueryWrapper<UcenterMember> wrapper = new QueryWrapper<>();
-        wrapper.eq("mobile", mobile);
-        Integer count = baseMapper.selectCount(wrapper);
-        if (count > 0) {
-            throw new MoguException(20001, "该号码已注册账号");
-        }
-
-        //都无误,添加到数据库
-        UcenterMember member = new UcenterMember();
-        member.setMobile(mobile);
-        member.setNickname(nickname);
-        member.setPassword(MD5Utils.encrypt(password));
-        //默认头像
-        member.setAvatar("https://edu-mogu.oss-cn-chengdu.aliyuncs.com/%E9%BB%98%E8%AE%A4%E5%AE%87%E8%88%AA%E5%91%98%E5%A4%B4%E5%83%8F.png");
-        baseMapper.insert(member);
-    }
-
 
     /**
      * 根据id获取是否登录信息
@@ -149,10 +107,6 @@ public class UCenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         return baseMapper.selectOne(wrapper);
     }
 
-    @Override
-    public Integer countRegister(String day) {
-        return baseMapper.countRegister(day);
-    }
 
     @Override
     public AccountInfo getAccountInfo(HttpServletRequest request) {
@@ -169,87 +123,5 @@ public class UCenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         accountInfo.setMobile(byId.getMobile().substring(0, 3) + "****" + byId.getMobile().substring(7));
 
         return accountInfo;
-    }
-
-    @Override
-    public String callback(String code, String state) {
-        try {
-            //得到授权临时票据code
-            System.out.println(code);
-            //从redis中将state获取出来，和当前传入的state作比较
-            //如果一致则放行，如果不一致则抛出异常：非法访问
-
-            //向认证服务器发送请求换取access_token
-            String baseAccessTokenUrl =
-                    "https://api.weixin.qq.com/sns/oauth2/access_token" +
-                            "?appid=%s" +
-                            "&secret=%s" +
-                            "&code=%s" +
-                            "&grant_type=authorization_code";
-            String accessTokenUrl = String.format(baseAccessTokenUrl,
-                    ConstantWxUtils.WX_OPEN_APP_ID,
-                    ConstantWxUtils.WX_OPEN_APP_SECRET,
-                    code);
-            //发送请求得到 accessToken 和 openId
-            //使用 httpclient 发送请求,得到结果
-            String accessTokenInfo = HttpClientUtils.get(accessTokenUrl);
-            //accessTokenInfo 是 key-value 形式的字符串,可以将其装换为map
-            Gson gson = new Gson();
-            HashMap<String, String> mapAccessToken = gson.fromJson(accessTokenInfo, HashMap.class);
-            String accessToken = mapAccessToken.get("access_token");
-            String openid = mapAccessToken.get("openid");
-
-            //判断数据库中是否存在该微信用户,不存在添加,存在直接登录
-            UcenterMember member = getMemberByOpenId(openid);
-            if (member == null) {
-                //拿到accessToken 和 openId,再去请求固定地址,获取扫描人信息
-                String baseUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo" +
-                        "?access_token=%s" +
-                        "&openid=%s";
-                String userInfoUrl = String.format(baseUserInfoUrl, accessToken, openid);
-                String userInfo = HttpClientUtils.get(userInfoUrl);
-                HashMap<String, String> uerInfoMap = gson.fromJson(userInfo, HashMap.class);
-                String nickname = uerInfoMap.get("nickname");
-                String headimgurl = uerInfoMap.get("headimgurl");
-                //给数据库添加信息
-                member = new UcenterMember();
-                member.setOpenid(openid);
-                member.setNickname(nickname);
-                member.setAvatar(headimgurl);
-                this.save(member);
-            }
-            //使用jwt生成token字符串,里面存储id和昵称
-            String jwtToken = JwtUtils.getJwtToken(member.getId(), member.getNickname());
-            //最后通过路径传递回首页面
-            System.out.println(jwtToken);
-            return "redirect:http://localhost:3000?token=" + jwtToken;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new MoguException(20001, "登录失败");
-        }
-
-    }
-
-    @Override
-    public String getWxCode() {
-        //请求微信地址
-        //%s 为占位符
-        String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
-                "?appid=%s" +
-                "&redirect_uri=%s" +
-                "&response_type=code" +
-                "&scope=snsapi_login" +
-                "&state=%s" +
-                "#wechat_redirect";
-        //对 redirect_uri 进行编码
-        String redirectUrl = ConstantWxUtils.WX_OPEN_REDIRECT_URL;
-        try {
-            redirectUrl = URLEncoder.encode(redirectUrl, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String url = String.format(baseUrl, ConstantWxUtils.WX_OPEN_APP_ID,
-                redirectUrl, "atmogu");
-        return "redirect:" + url;
     }
 }
