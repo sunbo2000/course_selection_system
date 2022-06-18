@@ -9,10 +9,9 @@ spring:
       config:
         server-addr: 175.178.189.89:12208
         file-extension: yaml
-        namespace: aa0d25a8-0a2a-437a-a050-97dd785b92d5
+        namespace: b7a5df1e-2032-4c5d-9d76-1c3ffc50b966
       discovery:
         server-addr: 175.178.189.89:12208
-        namespace: aa0d25a8-0a2a-437a-a050-97dd785b92d5
     # 服务环境
 #  profiles:
 
