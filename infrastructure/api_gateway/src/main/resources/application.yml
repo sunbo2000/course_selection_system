@@ -28,49 +28,13 @@ spring:
             - Path=/*/acl/**
         #配置service-edu服务
 
-
         - id: db-service
           uri: lb://db-service
           predicates:
             - Path=/db/**
         #配置service-ucenter服务
 
-        - id: service-ucenter
-          uri: lb://service-uCenter
-          predicates:
-            - Path=/eduCenter/**
-
-        - id: service-cms
-          uri: lb://service-cms
-          predicates:
-            - Path=/cmsService/**
-
-        - id: service-msm
-          uri: lb://service-msm
-          predicates:
-            - Path=/eduMsm/**
-
-        - id: service-order
-          uri: lb://service-order
-          predicates:
-            - Path=/eduOrder/**
-
         - id: service-oss
           uri: lb://service-oss
           predicates:
             - Path=/eduOss/**
-
-        - id: service-daily
-          uri: lb://service-daily
-          predicates:
-            - Path=/eduStatistics/**
-
-        - id: service-vod
-          uri: lb://service-vod
-          predicates:
-            - Path=/eduVod/**
-
-        - id: service-acl
-          uri: lb://service-acl
-          predicates:
-            - Path=/admin/**
