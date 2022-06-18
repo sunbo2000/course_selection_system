@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.snbo.dbservice.mapper.DbStudentMapper">
+
+    <select id="getStudentCourseList" resultType="org.snbo.dbservice.bean.DbCourse">
+        SELECT c.`id`,
+               c.`teacher_id`,
+               c.`subject_id`,
+               c.`subject_parent_id`,
+               c.`title`,
+               c.`limited`,
+               c.`enroll`,
+               c.`cover`,
+               c.`credit`,
+               c.`status`
+        FROM `student_course` cs
+                 INNER JOIN `db_course` c
+                            ON cs.`student_id` = #{studentId} and cs.`course_id` = c.`id`
+        WHERE c.`subject_id` = #{subjectId}
+          AND c.`status` = 1
+    </select>
+</mapper>

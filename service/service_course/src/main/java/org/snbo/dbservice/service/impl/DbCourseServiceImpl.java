@@ -94,7 +94,7 @@ public class DbCourseServiceImpl extends ServiceImpl<DbCourseMapper, DbCourse> i
 
     @Override
     public String updateCourse(CourseVo courseVo) {
-        DbCourse course = new DbCourse();
+        DbCourse course = baseMapper.selectById(courseVo.getId());
         BeanUtils.copyProperties(courseVo, course);
         if (baseMapper.updateById(course) <= 0) {
             throw new MoguException(20001, "修改课程信息失败");

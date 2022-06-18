@@ -30,7 +30,7 @@ public class DbTeacherServiceImpl extends ServiceImpl<DbTeacherMapper, DbTeacher
         QueryWrapper<DbTeacher> wrapper = new QueryWrapper<>();
 
         String name = teacherQuery.getName();
-        String collegeId = teacherQuery.getCollegeId();
+        String collegeId = teacherQuery.getCollege();
 
         if (!StringUtils.isEmpty(name)) {
             wrapper.like("name", name);

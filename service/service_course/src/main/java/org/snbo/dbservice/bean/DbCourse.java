@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author snbo
@@ -22,7 +23,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="DbCourse对象", description="课程实体类")
+@ApiModel(value = "DbCourse对象", description = "课程实体类")
 public class DbCourse implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +58,10 @@ public class DbCourse implements Serializable {
 
     @ApiModelProperty(value = "课程是否可选,0:不可选,1:可选")
     private Integer status;
+
+    @Version
+    @TableField(fill = FieldFill.INSERT)
+    private Long version;
 
     @ApiModelProperty(value = "逻辑删除,0:未删除,1:已删除")
     @TableLogic

@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan("org.snbo.dbservice.mapper")
 @ComponentScan("org.snbo")
 public class CourseConfig {
+
     /**
      * 逻辑删除插件
      */

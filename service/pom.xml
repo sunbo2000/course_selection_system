@@ -12,9 +12,7 @@
     <artifactId>service</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>service_edu</module>
         <module>service_oss</module>
-        <module>service_ucenter</module>
         <module>service_acl</module>
         <module>service_course</module>
     </modules>
@@ -25,6 +23,11 @@
             <groupId>org.snbo</groupId>
             <artifactId>service_base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- 返回数据的类 -->
          <dependency>

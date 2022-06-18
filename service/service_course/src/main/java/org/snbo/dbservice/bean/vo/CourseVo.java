@@ -15,6 +15,7 @@ public class CourseVo {
 
     @ApiModelProperty(value = "课程老师id")
     private String teacherId;
+
     @ApiModelProperty(value = "课程分类父级id")
     private String subjectParentId;
 
@@ -41,5 +42,4 @@ public class CourseVo {
 
     @ApiModelProperty(value = "课程是否可选,0:不可选,1:可选")
     private Integer status;
-
 }

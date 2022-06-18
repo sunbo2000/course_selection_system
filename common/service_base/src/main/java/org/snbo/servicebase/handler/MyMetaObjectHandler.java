@@ -2,6 +2,7 @@ package org.snbo.servicebase.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         //填bean类的属性名
         this.setFieldValByName("gmtCreate", new Date(), metaObject);
         this.setFieldValByName("gmtModified", new Date(), metaObject);
+        this.setFieldValByName("version", 1, metaObject);
     }
 
 
