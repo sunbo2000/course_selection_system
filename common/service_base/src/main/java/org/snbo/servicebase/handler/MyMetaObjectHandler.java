@@ -24,7 +24,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         //填bean类的属性名
         this.setFieldValByName("gmtCreate", new Date(), metaObject);
         this.setFieldValByName("gmtModified", new Date(), metaObject);
-        this.setFieldValByName("version", 1, metaObject);
+        this.setFieldValByName("version", 1L, metaObject);
     }
 
 
