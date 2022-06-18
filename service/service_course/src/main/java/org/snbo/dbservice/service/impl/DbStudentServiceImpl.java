@@ -98,7 +98,7 @@ public class DbStudentServiceImpl extends ServiceImpl<DbStudentMapper, DbStudent
             wrapper.eq("major", major);
         }
 
-        wrapper.orderByAsc("grade", "major", "student_number");
+        wrapper.orderByAsc("grade", "major_id", "student_number");
 
         baseMapper.selectPage(page, wrapper);
 
