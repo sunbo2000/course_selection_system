@@ -4,6 +4,7 @@ package org.snbo.dbservice.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.snbo.commonutils.R;
+import org.snbo.dbservice.bean.DbCourse;
 import org.snbo.dbservice.bean.vo.CourseQuery;
 import org.snbo.dbservice.bean.vo.CourseVo;
 import org.snbo.dbservice.service.DbCourseService;
@@ -31,11 +32,17 @@ public class DbCourseController {
         this.courseService = courseService;
     }
 
+    @GetMapping("{id}")
+    public R getCourseById(@PathVariable String id) {
+        DbCourse course = courseService.getById(id);
+        return R.ok().data("course", course);
+    }
+
     @ApiOperation("post 请求 ,按条件分页查询课程信息,三个参数分别是当前页码,每页条数,查询条件")
     @PostMapping("/{current}/{size}")
     public R getCoursePage(@ApiParam(name = "current", value = "当前页码,路径参数") @PathVariable Long current,
                            @ApiParam(name = "size", value = "每页的条数,路径参数") @PathVariable Long size,
-                           @ApiParam(name = "courseQuery", value = "查询条件类,请求体") @RequestBody(required = false) CourseQuery courseQuery) {
+                           @ApiParam(name = "courseQuery", value = "查询条件类,请求体") @RequestBody CourseQuery courseQuery) {
         Map<String, Object> map = courseService.getCoursePage(current, size, courseQuery);
         return R.ok().data(map);
     }
